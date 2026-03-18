@@ -72,18 +72,36 @@ exports.loginUser= async (req, res)=>{
 
 //from here to start//
 //Get user info
-exports.getUserInfo= async (req, res)=>{
-    try{
-        const user= await User.findById(req.user.id).select("-password");
+// exports.getUserInfo= async (req, res)=>{
+//     try{
+//         const user= await User.findById(req.user.id).select("-password");
 
-        if(!user){
-            return res.status(404).json({message: "User not found"});
-        }
-    } catch (e){
-        res
-        .status(500)
-        .json({message: "Error fetching user info", error: e.message});
-    }
+//         if(!user){
+//             return res.status(404).json({message: "User not found"});
+//         }
+//     } catch (e){
+//         res
+//         .status(500)
+//         .json({message: "Error fetching user info", error: e.message});
+//     }
 
     
+// };
+exports.getUserInfo = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).select("-password");
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // ✅ ADD THIS
+        res.status(200).json(user);
+
+    } catch (e) {
+        res.status(500).json({
+            message: "Error fetching user info",
+            error: e.message
+        });
+    }
 };
