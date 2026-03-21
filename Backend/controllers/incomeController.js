@@ -1,9 +1,9 @@
-const User = require("../models/User");
+const xlsx= require("xlsx");
 const Income = require("../models/Income");
 
 
 //Add Income Source
-exports.addIncome = async (resizeBy, rec){
+exports.addIncome = async (req, res)=>{
     const userId = req.user.id;
 
     try{
@@ -28,19 +28,140 @@ exports.addIncome = async (resizeBy, rec){
     } catch (e){
         res.status(500).json({message: "Server Error"});
     }
-}
+};
 
 //Get All Income Source
-exports.getAllIncome = async (resizeBy, rec){
+exports.getAllIncome = async (req, res)=> {
+    const userId = req.user.id;
 
-}
+    try{
+        const income = await Income.find({userId}).sort({date: -1});
+        res.json(income);
+    } catch (error)
+    {
+        res.status(500).json({ message: "Server Error"});
+
+    }
+};
+// exports.getAllIncome = async (req, res) => {
+//     try {
+//         console.log("REQ.USER:", req.user); // debug line
+
+//         const userId = req.user.id;
+
+//         const income = await Income.find({ userId }).sort({ date: -1 });
+
+//         res.json(income);
+
+//     } catch (error) {
+//         console.log("ERROR:", error); // 👈 THIS tells us exact problem
+//         res.status(500).json({ message: "Server Error" });
+//     }
+// };
+
 
 //Delete Income Source
-exports.deleteIncome = async (resizeBy, rec){
+// exports.deleteIncome = async (req, res)=> {
+//     const userId= req.user.id;
+    
+//     try{
+//         await Income.findByIdAndDelete(req.params.id);
+//         res.json({message: "Income deleted successfully"});
+        
+//     } catch (e){
+//         res.status(500).json({message: "Server Error"})
+//     }
+// };
 
-}
+// Delete Income Source
+exports.deleteIncome = async (req, res) => {
+    const userId = req.user.id;
+
+    try {
+        const income = await Income.findById(req.params.id);
+
+        // Check if income exists
+        if (!income) {
+            return res.status(404).json({ message: "Income not found" });
+        }
+
+        // Check ownership
+        if (income.userId.toString() !== userId) {
+            return res.status(401).json({ message: "Not authorized" });
+        }
+
+        await income.deleteOne();
+
+        res.json({ message: "Income deleted successfully" });
+
+    } catch (e) {
+        res.status(500).json({ message: "Server Error" });
+    }
+};
 
 //Download Income Source
-exports.downloadIncomeExcel = async (resizeBy, rec){
+exports.downloadIncomeExcel = async (req, res)=> {
+    const userId = req.user.id;
 
-}
+    // try{
+    //     const income = (await Income.find({userId})).sort({date: -1});
+
+    //     //Prepare data for excel
+    //     const data = income.map((item)=>({
+    //         Source: item.source,
+    //         Amount: item.amount,
+    //         Date: item.date,
+
+    //     }));
+
+    //     const wb= xlsx.utils.book_new();
+    //     const ws= xlsx.utils.json_to_sheet(data);
+    //     xlsx.utils.book_append_sheet(wb, ws, "Income");
+    //     xlsx.writeFile(wb, 'income_details.xlsx');
+    //     res.download('income_details.xlsx')
+    // } 
+        try {
+        const income = await Income.find({ userId }).sort({ date: -1 });
+
+        if (!income.length) {
+            return res.status(404).json({
+                message: "No income records found",
+            });
+        }
+
+        const data = income.map((item) => ({
+            Source: item.source,
+            Amount: item.amount,
+            Date: item.date,
+        }));
+
+        const wb = xlsx.utils.book_new();
+        const ws = xlsx.utils.json_to_sheet(data);
+
+        xlsx.utils.book_append_sheet(wb, ws, "Income");
+
+        const buffer = xlsx.write(wb, {
+            type: "buffer",
+            bookType: "xlsx",
+        });
+
+        // confirmation headers
+        res.setHeader(
+            "Content-Disposition",
+            "attachment; filename=income_details.xlsx"
+        );
+
+        res.setHeader(
+            "Content-Type",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        );
+
+        console.log("Excel file generated successfully"); // backend confirmation
+
+        res.status(200).send(buffer);
+
+    }
+    catch (e){
+        res.status(500).json({message: "Server Error"});
+    }
+};
