@@ -15,6 +15,7 @@ import Expense from "./pages/Dashboard/Expense";
 
 const App=()=>{
   return (
+    <UserProvider>
     <div>
       
       <Router>
@@ -29,6 +30,7 @@ const App=()=>{
         </Routes>
       </Router>
     </div>
+    </UserProvider>
   );
 }
 
