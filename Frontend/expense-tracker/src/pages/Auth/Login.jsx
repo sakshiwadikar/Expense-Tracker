@@ -7,8 +7,7 @@ import { Link } from "react-router-dom";
 import { validateEmail } from "../../utils/helper";
 import axiosInstance from '../../axiosInstance';
 import { API_PATHS } from "../../utils/apiPaths";
-import { UserContext } from "../../context/userContext";
-
+import { UserContext } from "../../context/UserContext";
 
 const Login=()=>{
   const [email, setEmail] = useState("");
