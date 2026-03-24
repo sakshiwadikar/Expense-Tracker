@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import {BASE_URL} from "./utils/apiPaths";
+import {BASE_URL} from "./apiPaths";
 
 const axiosInstance = axios.create({
     baseURL: BASE_URL,
@@ -40,7 +40,7 @@ axiosInstance.interceptors.response.use(
         !error.config.url.includes("/auth/login")
       ) {
         localStorage.removeItem("token");
-        window.location.href = "/login";
+        // window.location.href = "/login";
       }
 
       if (error.response.status === 500) {
