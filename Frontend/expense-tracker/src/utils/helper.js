@@ -38,3 +38,40 @@ export const addThousandSeparator = (num) => {
         ? `${formattedInteger}.${decimalPart}`
         : formattedInteger;
 };
+
+
+export const prepareExpenseBarChartData = (data = []) => {
+  return data.map((item) => ({
+    category: item.category,
+    amount: item.amount,
+  }));
+};
+
+// export const prepareExpenseBarChartData = (data = []) => {
+//     const chartData = data.map((item) => ({
+//         category: item?.category,
+//         amount: item?.amount,
+//     }));
+//     return chartData;
+// }
+
+// export const prepareExpenseBarChartData = (data = []) => {
+//   const monthlyTotals = {};
+
+//   data.forEach((item) => {
+//     const month = new Date(item.date).toLocaleString("default", {
+//       month: "short",
+//     });
+
+//     monthlyTotals[month] =
+//       (monthlyTotals[month] || 0) + item.amount;
+//   });
+
+//   return Object.entries(monthlyTotals).map(
+//     ([month, amount]) => ({
+//       month,
+//       amount,
+//     })
+//   );
+// };
+
