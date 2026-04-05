@@ -9,7 +9,7 @@ import {
   ResponsiveContainer
 } from "recharts";
 
-const CustomBarChart = ({ data = [] }) => {
+const CustomBarChart = ({ data }) => {
 
   // Function to alternate bar colors
   const getBarColor = (index) => {

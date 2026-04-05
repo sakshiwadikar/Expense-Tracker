@@ -12,7 +12,8 @@ import RecentTransactions from "../../components/Dashboard/RecentTransactions";
 import FinanceOverview from "../../components/Dashboard/FinanceOverview";
 import ExpenseTransations from "../../components/Dashboard/ExpenseTransations";
 import Last30DaysExpenses from "../../components/Dashboard/Last30DaysExpenses";
-
+import RecentIncomeWithChart from "../../components/Dashboard/RecentIncomeWithChart";
+import RecentIncome from "../../components/Dashboard/RecentIncome";
 
 const Home = () => {
   useUserAuth();
@@ -49,7 +50,7 @@ const Home = () => {
   return (
     <DashboardLayout activeMenu="Dashboard">
       <div className="my-5 mx-auto">
-       {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
          <InfoCard 
             icon={<IoMdCard/>}
             label="Total Balance"
@@ -68,10 +69,10 @@ const Home = () => {
             value={addThousandSeparator(dashboardData?.totalExpense || 0)}
             color="bg-red-500" 
          />
-       </div> */}
+       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-        {/* <RecentTransactions 
+        <RecentTransactions 
             transactions={dashboardData?.recentTransactions || []}
             onSeeMore={() => navigate("/expense")}
             />
@@ -82,7 +83,7 @@ const Home = () => {
           totalIncome={dashboardData?.totalIncome || 0}
           totalExpense={dashboardData?.totalExpense || 0}
           
-        /> */}
+        />
 
         <ExpenseTransations
             transactions={dashboardData?.last30DaysExpenses?.transactions || []}
@@ -93,6 +94,20 @@ const Home = () => {
             data={dashboardData?.last30DaysExpenses?.transactions || []}
         />
 
+
+        <RecentIncomeWithChart
+          transactions={dashboardData?.last60DaysIncome?.transactions?.slice(0,4) || []}
+          totalIncome={dashboardData?.totalIncome || 0}
+        />
+        
+        <RecentIncome
+            transactions={dashboardData?.last60DaysIncome?.transactions || []}
+            onSeeMore={() => navigate("/income")} 
+        />
+            
+        
+
+
       </div>
 
       </div>
@@ -102,78 +117,3 @@ const Home = () => {
 
 export default Home;
 
-// import React, { useEffect, useState } from "react";
-// import DashboardLayout from "../../components/layouts/DashboardLayout";
-// import useUserAuth from "../../hooks/useUserAuth";
-// import { useNavigate } from "react-router-dom";
-// import axiosInstance from "../../utils/axiosInstance";
-// import { API_PATHS } from "../../utils/apiPaths";
-
-
-// const Home = () => {
-//   useUserAuth();
-
-
-//   const navigate = useNavigate();
-
-//   const [dashboardData, setDashboardData] = useState(null);
-//   const [loading, setLoading] = useState(false);
-
-//   const fetchDashboardData = async () => {
-//     if (loading) return;
-
-//     setLoading(true);
-
-//     try {
-//       const response = await axiosInstance.get(
-//         `${API_PATHS.DASHBOARD.GET_DATA}`
-//       );
-
-//       if (response.data) {
-//         setDashboardData(response.data);
-//       }
-//     } catch (error) {
-//       console.log("Something went wrong. Please try again.", error);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchDashboardData();
-//     return () => {};
-//   } , []);
-
-
-//   return (
-//     <DashboardLayout activeMenu="Dashboard">
-//       <div className="my-5 mx-auto">
-
-//         <h2 className="text-xl font-semibold mb-5">
-//           Home
-//         </h2>
-        
-
-//         <div className="grid grid-cols-3 gap-5">
-
-//           <div className="bg-white shadow rounded-xl p-5">
-//             Total Balance
-//           </div>
-
-//           <div className="bg-white shadow rounded-xl p-5">
-//             Total Income
-//           </div>
-
-//           <div className="bg-white shadow rounded-xl p-5">
-//             Total Expense
-//           </div>
-
-//         </div>
-
-//       </div>
-//     </DashboardLayout>
-//   );
-// }; 
-
-
-// export default Home;
