@@ -33,7 +33,7 @@ const CustomPieChart = ({
   // ✅ Prevent LegendSizeDispatcher crash
   if (chartData.length === 0) {
     return (
-      <div className="h-[380px] flex items-center justify-center text-gray-400">
+      <div className="h-95 flex items-center justify-center text-gray-400">
         No income data available
       </div>
     );
