@@ -25,7 +25,6 @@ const Expense = () => {
   const [openAddExpenseModal, setOpenAddExpenseModal] = useState(false);
 
   const fetchExpenseDetails = async () => {
-  if (loading) return;
 
   setLoading(true);
 
@@ -167,7 +166,7 @@ useEffect(() => {
 
       <Modal 
             isOpen={openDeleteAlert.show}
-            onColose={() => setOpenDeleteAlert({show:false, data:null})}
+            onClose={() => setOpenDeleteAlert({show:false, data:null})}
             title="Confirm Delete">
 
             <DeleteAlert content="Are you sure you want to delete this expense details?"

@@ -18,7 +18,9 @@ axiosInstance.interceptors.request.use (
         if(accessToken) {
             config.headers.Authorization= `Bearer ${accessToken}`;
         }
-
+        if (config.method === 'get') {
+            config.params = { ...config.params, _t: new Date().getTime() };
+        }
         return config;
     },
     (error) => {

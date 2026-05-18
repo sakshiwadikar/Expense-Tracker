@@ -23,7 +23,6 @@ const Income=()=>{
   
   //Get all income details
   const fetchIncomeDetails=async()=>{
-    if (loading) return;
 
     setLoading(true);
 
@@ -160,7 +159,7 @@ if (response.data) {
 
         <Modal 
             isOpen={openDeleteAlert.show}
-            onColose={() => setOpenDeleteAlert({show:false, data:null})}
+            onClose={() => setOpenDeleteAlert({show:false, data:null})}
             title="Confirm Delete">
 
             <DeleteAlert content="Are you sure you want to delete this income details?"
