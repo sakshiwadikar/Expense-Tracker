@@ -47,6 +47,57 @@ export const prepareExpenseBarChartData = (data = []) => {
   }));
 };
 
+
+// export const prepareIncomeBarChartData =(data=[])=>{
+//     const sortedData=[...data].sort((a,b)=> new Date(a.date)-new Date(b.date));
+//     const chartData= sortedData.map((item)=>({
+//         month: moment(item?.date).format('Do MMM'),
+//         amount: item?.amount,
+//         source: item?.source,
+
+//     }));
+
+//     return chartData;
+// }
+
+
+
+import moment from "moment";
+
+export const prepareIncomeBarChartData = (data = []) => {
+  if (!Array.isArray(data)) return [];
+
+  return data.map((item, index) => ({
+    month: item.date
+      ? moment(item.date).format("Do MMM")
+      : `Item ${index + 1}`,
+    amount: Number(item.amount) || 0,
+  }));
+};
+
+export const prepareExpenseLineChartData = (data = []) => {
+  const sortedData = [...data].sort(
+    (a, b) => new Date(a.date) - new Date(b.date)
+  );
+
+  const chartData = sortedData.map((item) => ({
+    month: moment(item?.date).format("Do MMM"),
+    amount: item?.amount,
+    category: item?.category,
+  }));
+
+  return chartData;
+};
+
+
+
+
+
+
+
+
+
+
 // export const prepareExpenseBarChartData = (data = []) => {
 //     const chartData = data.map((item) => ({
 //         category: item?.category,

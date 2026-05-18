@@ -15,6 +15,7 @@ import Last30DaysExpenses from "../../components/Dashboard/Last30DaysExpenses";
 import RecentIncomeWithChart from "../../components/Dashboard/RecentIncomeWithChart";
 import RecentIncome from "../../components/Dashboard/RecentIncome";
 
+
 const Home = () => {
   useUserAuth();
 
@@ -46,6 +47,9 @@ const Home = () => {
   useEffect(() => {
     fetchDashboardData();
   }, []);
+
+  console.log("dashboardData:", dashboardData);
+  console.log("last30DaysExpenses:", dashboardData?.last30DaysExpenses);
 
   return (
     <DashboardLayout activeMenu="Dashboard">
