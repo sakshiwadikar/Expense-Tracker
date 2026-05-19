@@ -4,6 +4,7 @@ const{
     addIncome,
     getAllIncome,
     deleteIncome,
+    updateIncome,
     downloadIncomeExcel
 } = require("../controllers/incomeController");
 
@@ -15,5 +16,6 @@ router.post("/add", protect , addIncome);
 router.get("/get" , protect, getAllIncome);
 router.get("/downloadexcel" , protect, downloadIncomeExcel);
 router.delete("/:id" , protect, deleteIncome);
+router.put("/:id" , protect, updateIncome);
 
 module.exports =router;

@@ -268,6 +268,36 @@ exports.deleteIncome = async (req, res) => {
     }
 };
 
+// Update Income
+exports.updateIncome = async (req, res) => {
+    const userId = req.user._id;
+
+    try {
+        const { icon, source, amount, date } = req.body;
+        const income = await Income.findById(req.params.id);
+
+        if (!income) {
+            return res.status(404).json({ message: "Income not found" });
+        }
+
+        if (income.userId.toString() !== userId.toString()) {
+            return res.status(401).json({ message: "Not authorized" });
+        }
+
+        income.icon = icon || income.icon;
+        income.source = source || income.source;
+        income.amount = amount || income.amount;
+        income.date = date ? new Date(date) : income.date;
+
+        await income.save();
+
+        res.status(200).json(income);
+
+    } catch (e) {
+        res.status(500).json({ message: "Server Error" });
+    }
+};
+
 
 // Download Income Excel
 exports.downloadIncomeExcel = async (req, res) => {
