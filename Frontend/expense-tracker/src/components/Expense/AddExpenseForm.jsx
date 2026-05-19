@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import Input from "../Inputs/Input";
 import EmojiPickerPopup from "../EmojiPickerPopup";
 
-const AddExpenseForm = ({ onAddExpense }) => {
+const AddExpenseForm = ({ onAddExpense, initialData }) => {
   const [income, setIncome] = useState({
-    category: "",
-    amount: "",
-    date: "",
-    icon: "",
+    category: initialData?.category || "",
+    amount: initialData?.amount || "",
+    date: initialData?.date ? initialData.date.split("T")[0] : "",
+    icon: initialData?.icon || "",
   });
 
   const handleChange = (key, value) =>
@@ -50,7 +50,7 @@ const AddExpenseForm = ({ onAddExpense }) => {
     className="add-btn add-btn-fill"
     onClick={() => onAddExpense(income)}
   >
-    Add Expense
+    {initialData ? "Update Expense" : "Add Expense"}
   </button>
 </div>
     </div>

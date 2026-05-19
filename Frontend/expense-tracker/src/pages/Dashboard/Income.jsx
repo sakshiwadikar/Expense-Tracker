@@ -16,6 +16,7 @@ const Income=()=>{
   useUserAuth();
 
   const [openAddIncomeModal, setOpenAddIncomeModal] = React.useState(false);
+  const [editIncomeData, setEditIncomeData] = React.useState(null);
   const [incomeData, setIncomeData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [openDeleteAlert, setOpenDeleteAlert] = React.useState({show:false, data:null});
@@ -62,15 +63,26 @@ if (response.data) {
   }
 
   try {
-    await axiosInstance.post(API_PATHS.INCOME.ADD_INCOME, {
-      source,
-      amount,
-      date,
-      icon,
-    });
+    if (editIncomeData) {
+      await axiosInstance.put(API_PATHS.INCOME.UPDATE_INCOME(editIncomeData._id), {
+        source,
+        amount,
+        date,
+        icon,
+      });
+      toast.success("Income updated successfully");
+    } else {
+      await axiosInstance.post(API_PATHS.INCOME.ADD_INCOME, {
+        source,
+        amount,
+        date,
+        icon,
+      });
+      toast.success("Income added successfully");
+    }
 
     setOpenAddIncomeModal(false);
-    toast.success("Income added successfully");
+    setEditIncomeData(null);
     fetchIncomeDetails();
   } catch (error) {
     console.error(
@@ -97,7 +109,7 @@ if (response.data) {
 };
 
   //Update income
-  const updateIncome=async(id, income)=> {};
+  // Handled inside handleAddIncome by checking editIncomeData
 
   //Handle download income details
   const handleDownloadIncomeDetails= async()=>{
@@ -138,7 +150,10 @@ if (response.data) {
         <div className="">
           <IncomeOverview
             transactions={incomeData}
-            onAddIncome={() => setOpenAddIncomeModal(true)}>
+            onAddIncome={() => {
+              setEditIncomeData(null);
+              setOpenAddIncomeModal(true);
+            }}>
           </IncomeOverview>
         </div>
 
@@ -147,14 +162,21 @@ if (response.data) {
         onDelete={(id) => {
           setOpenDeleteAlert({ show: true, data: id });
         }}
+        onEdit={(income) => {
+          setEditIncomeData(income);
+          setOpenAddIncomeModal(true);
+        }}
         onDownload={handleDownloadIncomeDetails}
       />
 </div>
         <Modal
             isOpen={openAddIncomeModal}
-            onClose={() => setOpenAddIncomeModal(false)}
-            title="Add Income" >
-              <AddIncomeForm onAddIncome={handleAddIncome} />
+            onClose={() => {
+              setOpenAddIncomeModal(false);
+              setEditIncomeData(null);
+            }}
+            title={editIncomeData ? "Update Income" : "Add Income"} >
+              <AddIncomeForm onAddIncome={handleAddIncome} initialData={editIncomeData} />
         </Modal>
 
         <Modal 
