@@ -12,14 +12,29 @@
 
 // module.exports = connectDB;
 
+// const mongoose = require("mongoose");
+
+// const connectDB = async () => {
+//     try{
+//         console.log("Mongo URI:", process.env.MONGO_URI); // 👈 add this line
+//         await mongoose.connect(process.env.MONGO_URI);
+//         console.log("MongoDB connected successfully");
+//     } catch (error){
+//         console.error("MongoDB connection failed:", error.message);
+//         process.exit(1);
+//     }
+// };
+
+// module.exports = connectDB;
+
 const mongoose = require("mongoose");
 
 const connectDB = async () => {
-    try{
-        console.log("Mongo URI:", process.env.MONGO_URI); // 👈 add this line
+    try {
+        console.log("Connecting to MongoDB...");
         await mongoose.connect(process.env.MONGO_URI);
         console.log("MongoDB connected successfully");
-    } catch (error){
+    } catch (error) {
         console.error("MongoDB connection failed:", error.message);
         process.exit(1);
     }
